@@ -6,8 +6,8 @@ import com.lightbend.lagom.scaladsl.testkit.ServiceTest
 import org.scalatest.{AsyncWordSpec, BeforeAndAfterAll, Matchers}
 
 class CounterServiceSpec extends AsyncWordSpec with Matchers with BeforeAndAfterAll {
-  private val server = ServiceTest.startServer(
-    ServiceTest.defaultSetup
+  val server = ServiceTest.startServer(
+    ServiceTest.defaultSetup.withCassandra(true)
   ) { ctx =>
     new CounterApplication(ctx) with LocalServiceLocator
   }
@@ -23,9 +23,13 @@ class CounterServiceSpec extends AsyncWordSpec with Matchers with BeforeAndAfter
       }
     }
 
-    "return same value" in {
-      client.add("1").invoke(2).map { value =>
-        value shouldBe 2
+    "add value" in {
+      for {
+        _ <- client.add("1").invoke(1)
+        _ <- client.add("1").invoke(2)
+        value <- client.counter("1").invoke()
+      } yield {
+        value shouldBe 3
       }
     }
   }

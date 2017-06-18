@@ -1,6 +1,6 @@
 package com.example.counter.api
 
-import akka.NotUsed
+import akka.{Done, NotUsed}
 import com.lightbend.lagom.scaladsl.api.{Service, ServiceCall}
 
 trait CounterService extends Service {
@@ -8,7 +8,7 @@ trait CounterService extends Service {
 
   def counter(id: String): ServiceCall[NotUsed, Int]
 
-  def add(id: String): ServiceCall[Int, Int]
+  def add(id: String): ServiceCall[Int, Done]
 
   def descriptor = {
     named("counter")
