@@ -8,7 +8,7 @@ val macwire = "com.softwaremill.macwire" %% "macros" % "2.2.5" % "provided"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.1" % Test
 
 lazy val `hello` = (project in file("."))
-  .aggregate(`counter-api`, `counter-impl`, `hello-api`, `hello-impl`, `hello-stream-api`, `hello-stream-impl`)
+  .aggregate(`counter-api`, `counter-impl`, `hello-api`, `hello-impl`, `hello-stream-api`, `hello-stream-impl`, `front-end`)
 
 lazy val `counter-api` = (project in file("counter-api"))
   .settings(
@@ -69,3 +69,13 @@ lazy val `hello-stream-impl` = (project in file("hello-stream-impl"))
     )
   )
   .dependsOn(`hello-stream-api`, `hello-api`)
+
+lazy val `front-end` = (project in file("front-end"))
+  .enablePlugins(PlayScala && LagomPlay)
+  .settings(
+    libraryDependencies ++= Seq(
+      lagomScaladslServer,
+      macwire,
+      scalaTest
+    )
+  )
