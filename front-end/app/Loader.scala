@@ -7,7 +7,7 @@ import play.api.ApplicationLoader.Context
 import play.api.i18n.I18nComponents
 import play.api.libs.ws.ahc.AhcWSComponents
 import com.softwaremill.macwire._
-import controllers.HomeController
+import controllers.{CounterController, HomeController}
 import router.Routes
 
 import scala.collection.immutable
@@ -28,6 +28,7 @@ abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext
   lazy val counterService = serviceClient.implement[CounterService]
 
   lazy val home = wire[HomeController]
+  lazy val counter = wire[CounterController]
 }
 
 class WebGatewayLoader extends ApplicationLoader {

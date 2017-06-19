@@ -5,10 +5,8 @@ import play.api.mvc._
 
 import scala.concurrent.ExecutionContext
 
-class HomeController(counterService: CounterService)(implicit ec: ExecutionContext) extends Controller {
-  def index = Action.async {
-    counterService.counter("1").invoke().map { value =>
-      Ok(views.html.index.render(value))
-    }
+class HomeController()(implicit ec: ExecutionContext) extends Controller {
+  def index = Action {
+    Ok(views.html.index.render())
   }
 }
