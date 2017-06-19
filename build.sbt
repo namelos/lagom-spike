@@ -72,6 +72,7 @@ lazy val `hello-stream-impl` = (project in file("hello-stream-impl"))
 
 lazy val `front-end` = (project in file("front-end"))
   .enablePlugins(PlayScala && LagomPlay)
+  .dependsOn(`counter-api`)
   .settings(
     libraryDependencies ++= Seq(
       lagomScaladslServer,

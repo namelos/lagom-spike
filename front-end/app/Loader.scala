@@ -1,3 +1,4 @@
+import com.example.counter.api.CounterService
 import com.lightbend.lagom.scaladsl.api.{ServiceAcl, ServiceInfo}
 import com.lightbend.lagom.scaladsl.client.LagomServiceClientComponents
 import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
@@ -10,6 +11,7 @@ import controllers.HomeController
 import router.Routes
 
 import scala.collection.immutable
+import scala.concurrent.ExecutionContext
 
 abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext(context)
   with I18nComponents with AhcWSComponents with LagomServiceClientComponents {
@@ -17,11 +19,13 @@ abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext
     "front-end",
     Map("front-end" -> immutable.Seq(ServiceAcl.forPathRegex("(?!/api/).*")))
   )
-  override implicit lazy val executionContext = actorSystem.dispatcher
+  override implicit lazy val executionContext: ExecutionContext = actorSystem.dispatcher
   override lazy val router = {
     val prefix = "/"
     wire[Routes]
   }
+
+  lazy val counterService = serviceClient.implement[CounterService]
 
   lazy val home = wire[HomeController]
 }
