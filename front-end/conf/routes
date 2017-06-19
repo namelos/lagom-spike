@@ -1,2 +1,2 @@
 GET / controllers.HomeController.index
-GET /counter controllers.CounterController.show
+GET /counter/:id controllers.CounterController.show(id)
