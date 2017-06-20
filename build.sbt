@@ -6,6 +6,7 @@ scalaVersion in ThisBuild := "2.11.8"
 
 val macwire = "com.softwaremill.macwire" %% "macros" % "2.2.5" % "provided"
 val scalaTest = "org.scalatest" %% "scalatest" % "3.0.1" % Test
+val postgres = "org.postgresql" % "postgresql" % "9.4.1212"
 
 lazy val `hello` = (project in file("."))
   .aggregate(`counter-api`, `counter-impl`, `hello-api`, `hello-impl`, `hello-stream-api`, `hello-stream-impl`, `front-end`)
@@ -21,7 +22,9 @@ lazy val `counter-impl` = (project in file("counter-impl"))
   .enablePlugins(LagomScala)
   .settings(
     libraryDependencies ++= Seq(
-      lagomScaladslPersistenceCassandra,
+//      lagomScaladslPersistenceCassandra,
+      postgres,
+      lagomScaladslPersistenceJdbc,
       lagomScaladslKafkaBroker,
       lagomScaladslTestKit,
       macwire,
@@ -42,7 +45,9 @@ lazy val `hello-impl` = (project in file("hello-impl"))
   .enablePlugins(LagomScala)
   .settings(
     libraryDependencies ++= Seq(
-      lagomScaladslPersistenceCassandra,
+//      lagomScaladslPersistenceCassandra,
+      postgres,
+      lagomScaladslPersistenceJdbc,
       lagomScaladslKafkaBroker,
       lagomScaladslTestKit,
       macwire,
