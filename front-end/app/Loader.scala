@@ -4,7 +4,7 @@ import com.lightbend.lagom.scaladsl.client.LagomServiceClientComponents
 import com.lightbend.lagom.scaladsl.devmode.LagomDevModeComponents
 import play.api.{ApplicationLoader, BuiltInComponentsFromContext, Mode}
 import play.api.ApplicationLoader.Context
-import play.api.i18n.I18nComponents
+import play.api.i18n.{I18nComponents, MessagesApi}
 import play.api.libs.ws.ahc.AhcWSComponents
 import com.softwaremill.macwire._
 import controllers.{CounterController, HomeController}
@@ -20,6 +20,9 @@ abstract class WebGateway(context: Context) extends BuiltInComponentsFromContext
     Map("front-end" -> immutable.Seq(ServiceAcl.forPathRegex("(?!/api/).*")))
   )
   override implicit lazy val executionContext: ExecutionContext = actorSystem.dispatcher
+
+  implicit lazy val message: MessagesApi = messagesApi
+
   override lazy val router = {
     val prefix = "/"
     wire[Routes]
