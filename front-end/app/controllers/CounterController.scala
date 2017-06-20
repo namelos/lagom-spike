@@ -6,7 +6,7 @@ import play.api.data.Forms._
 import play.api.i18n._
 import play.api.mvc._
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class CounterController(counterService: CounterService)(implicit ec: ExecutionContext, implicit val messagesApi: MessagesApi) extends Controller with I18nSupport {
   val addForm = Form(
@@ -21,10 +21,12 @@ class CounterController(counterService: CounterService)(implicit ec: ExecutionCo
     }
   }
 
-  def add(id: String) = Action { implicit request =>
+  def add(id: String) = Action.async { implicit request =>
     addForm.bindFromRequest.fold(
-      _ => BadRequest("Error"),
-      add => Ok(views.html.counter(add.n, addForm))
+      _ => Future.successful(BadRequest("Error")),
+      add => counterService.add(id).invoke(add.n).map { _ =>
+        Redirect(s"/counter/$id")
+      }
     )
   }
 }
